@@ -1,13 +1,5 @@
-python-poetry-project
-├── src
-│   └── project
-│       ├── __init__.py
-│       └── main.py
-├── tests
-│   ├── __init__.py
-│   └── test_main.py
-├── .gitignore
-├── pyproject.toml
-├── poetry.lock
-├── poe.toml
-└── README.md
+from sf_jam.main import hello
+
+
+def test_hello():
+    assert hello() == "Hello, World!"
