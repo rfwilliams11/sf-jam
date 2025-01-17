@@ -1,61 +1,57 @@
-# File: /python-poetry-project/python-poetry-project/README.md
+# My Project
 
-# Python Poetry Project
+A simple Python project
 
-This project is a Python application managed with Poetry for dependency management and Poe for task management.
+## Features
 
-## Project Structure
+- Dependency management with Poetry
+- Task automation with poethepoet (poe)
+- Code formatting with Black and isort
+- Linting with flake8
+- Testing with pytest
 
-```
-python-poetry-project
-├── src
-│   └── project
-│       ├── __init__.py
-│       └── main.py
-├── tests
-│   ├── __init__.py
-│   └── test_main.py
-├── .gitignore
-├── pyproject.toml
-├── poetry.lock
-├── poe.toml
-└── README.md
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/my_project.git
+cd my_project
 ```
 
-## Setup
+2. Create and activate a virtual environment:
+```bash
+# Create virtual environment
+python -m venv .venv
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd python-poetry-project
-   ```
+# Activate on Windows
+.venv\Scripts\activate
+# OR activate on Unix/MacOS
+source .venv/bin/activate
+```
 
-2. **Install dependencies:**
-   ```bash
-   poetry install
-   ```
+3. Install dependencies:
+```bash
+pip install poetry poethepoet
+poetry install
+```
 
-3. **Run the application:**
-   ```bash
-   poetry run python src/project/main.py
-   ```
+## Usage
 
-## Running Tests
-
-To run the tests, use the following command:
+The project includes several pre-configured tasks that can be run using `poe`:
 
 ```bash
-poetry run pytest
+# Run the application
+poe run
+
+# Format code
+poe format
+
+# Run linting
+poe lint
+
+# Run tests
+poe test
+
+# Run all checks (format, lint, test)
+poe check
 ```
-
-## Task Management
-
-To manage tasks, you can use Poe. For a list of available tasks, run:
-
-```bash
-poe
-```
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
