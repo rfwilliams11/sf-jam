@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "my_project"
+name = "sf_jam"
 version = "0.1.0"
 description = "Your project description"
 authors = ["Your Name <your.email@example.com>"]
