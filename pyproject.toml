@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sf_jam"
+name = "my_project"
 version = "0.1.0"
 description = "Your project description"
 authors = ["Your Name <your.email@example.com>"]
@@ -22,7 +22,7 @@ format = [
 lint = "flake8 src tests"
 test = "pytest tests/"
 check = ["format", "lint", "test"]
-run = "python src/sf_jam/main.py"
+run = "python src/my_project/main.py"
 
 [build-system]
 requires = ["poetry-core"]
