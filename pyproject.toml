@@ -6,6 +6,8 @@ authors = ["Your Name <your.email@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+beautifulsoup4 = "^4.12.3"
+requests = "^2.32.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
@@ -22,7 +24,7 @@ format = [
 lint = "flake8 src tests"
 test = "pytest tests/"
 check = ["format", "lint", "test"]
-run = "python src/my_project/main.py"
+run = "python src/sf_jam/main.py"
 
 [build-system]
 requires = ["poetry-core"]
