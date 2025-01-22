@@ -1,6 +1,7 @@
 import json
 from chapel import retrieve_chapel_concerts
 from fillmore import retrieve_fillmore_concerts
+from warfield import retrieve_warfield_concerts
 
 
 if __name__ == "__main__":
@@ -11,6 +12,7 @@ if __name__ == "__main__":
     print("")
     print("1. The Chapel")
     print("2. The Fillmore")
+    print("3. The Warfield")
     print("")
 
     while True:
@@ -23,6 +25,10 @@ if __name__ == "__main__":
             elif choice == 2:
                 concerts = retrieve_fillmore_concerts()
                 output_file_name = "fillmore_concerts.json"
+                break
+            elif choice == 3:
+                concerts = retrieve_warfield_concerts()
+                output_file_name = "warfield_concerts.json"
                 break
             else:
                 print("Invalid choice. Please enter 1, 2, or 3.")

@@ -1,13 +1,15 @@
+from typing import List
 import requests
 from bs4 import BeautifulSoup
+from concert import Concert
 
 
-def retrieve_chapel_concerts():
+def retrieve_chapel_concerts() -> List[Concert]:
     """
     Retrieve concert listings from The Chapel website
 
     Returns:
-        list: List of dictionaries containing concert data
+        (List[Concert]): List of Concert objects
     """
     concerts = []
 
@@ -19,7 +21,7 @@ def retrieve_chapel_concerts():
     return concerts
 
 
-def fetch_and_parse_concerts(url):
+def fetch_and_parse_concerts(url: str) -> List[Concert]:
     """
     Fetch concert listings from the webpage and parse all concerts
 
@@ -66,7 +68,7 @@ def fetch_and_parse_concerts(url):
         return None
 
 
-def parse_concert_listing(concert_div):
+def parse_concert_listing(concert_div) -> Concert:
     """
     Parse a single concert listing div and return structured data
 
@@ -74,7 +76,7 @@ def parse_concert_listing(concert_div):
         concert_div (BeautifulSoup): BeautifulSoup object of a single concert listing
 
     Returns:
-        dict: Structured concert data
+        dict: Concert
     """
     event_info = concert_div.find("div", class_="event-info-block")
 
