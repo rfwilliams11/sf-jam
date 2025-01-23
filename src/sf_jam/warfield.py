@@ -23,7 +23,7 @@ def fetch_and_parse_concerts(url: str) -> List[Concert]:
         url (str): URL of the concert listings page
 
     Returns:
-        list: List of dictionaries containing concert data
+        list: List of Concert objects
     """
     sessions = requests.Session()
     concerts = []

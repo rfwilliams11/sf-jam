@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from concert import Concert
+from headers import headers
 
 
 def retrieve_fillmore_concerts():
@@ -26,18 +27,10 @@ def fetch_and_parse_concerts(url: str) -> List[Concert]:
         url (str): URL of the concert listings page
 
     Returns:
-        list: List of dictionaries containing concert data
+        list: List of Concert objects
     """
     session = requests.Session()
     concerts = []
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "DNT": "1",
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-    }
 
     try:
         # Fetch the page
@@ -50,7 +43,6 @@ def fetch_and_parse_concerts(url: str) -> List[Concert]:
 
         # Find all concert listings
         concert_divs = soup.find_all("div", class_="sc-fyofxi-0 MDVIb")
-        # print(concert_divs)
 
         # Parse each concert listing
         for concert_div in concert_divs:

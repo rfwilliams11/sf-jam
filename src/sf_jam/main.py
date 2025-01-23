@@ -2,6 +2,7 @@ import json
 from chapel import retrieve_chapel_concerts
 from fillmore import retrieve_fillmore_concerts
 from warfield import retrieve_warfield_concerts
+from fox import retrieve_fox_concerts
 
 
 if __name__ == "__main__":
@@ -13,6 +14,7 @@ if __name__ == "__main__":
     print("1. The Chapel")
     print("2. The Fillmore")
     print("3. The Warfield")
+    print("4. Fox Theatre")
     print("")
 
     while True:
@@ -30,10 +32,14 @@ if __name__ == "__main__":
                 concerts = retrieve_warfield_concerts()
                 output_file_name = "warfield_concerts.json"
                 break
+            elif choice == 4:
+                concerts = retrieve_fox_concerts()
+                output_file_name = "fox_concerts.json"
+                break
             else:
-                print("Invalid choice. Please enter 1, 2, or 3.")
+                print("Invalid choice. Please enter 1, 2, 3, or 4.")
         except ValueError:
-            print("Invalid input. Please enter a number (1, 2, or 3).")
+            print("Invalid input. Please enter a number (1, 2, 3, or 4)")
 
     if concerts:
         # Save to JSON file
