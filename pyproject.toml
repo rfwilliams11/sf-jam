@@ -8,6 +8,7 @@ authors = ["Your Name <your.email@example.com>"]
 python = "^3.11"
 beautifulsoup4 = "^4.12.3"
 requests = "^2.32.3"
+streamlit = "^1.41.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
@@ -25,6 +26,7 @@ lint = "flake8 src tests"
 test = "pytest tests/"
 check = ["format", "lint", "test"]
 run = "python src/sf_jam/main.py"
+app = "poetry run streamlit run src/sf_jam/app.py"
 
 [build-system]
 requires = ["poetry-core"]

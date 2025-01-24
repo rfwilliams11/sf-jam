@@ -1,57 +1,24 @@
-# My Project
+# SF Jam 🎸🌉
 
-A simple Python project
+## Overview
+SF Jam is a Streamlit web application aggregating upcoming concerts from San Francisco venues.
 
-## Features
-
-- Dependency management with Poetry
-- Task automation with poethepoet (poe)
-- Code formatting with Black and isort
-- Linting with flake8
-- Testing with pytest
-
-## Installation
-
-1. Clone the repository:
+## Setup
 ```bash
-git clone https://github.com/yourusername/my_project.git
-cd my_project
-```
+# Install Poetry (if not already installed)
+pip install poetry
 
-2. Create and activate a virtual environment:
-```bash
-# Create virtual environment
-python -m venv .venv
+# Clone the repository
+git clone https://github.com/rfwilliams/sf-jam.git
+cd sf-jam
 
-# Activate on Windows
-.venv\Scripts\activate
-# OR activate on Unix/MacOS
-source .venv/bin/activate
-```
-
-3. Install dependencies:
-```bash
-pip install poetry poethepoet
+# Install dependencies
 poetry install
 ```
 
-## Usage
-
-The project includes several pre-configured tasks that can be run using `poe`:
-
-```bash
-# Run the application
-poe run
-
-# Format code
-poe format
-
-# Run linting
-poe lint
-
-# Run tests
-poe test
-
-# Run all checks (format, lint, test)
-poe check
-```
+## Development Tasks
+- `poe format`: Format code with Black and isort
+- `poe lint`: Run flake8 linter
+- `poe test`: Run pytest
+- `poe check`: Run all checks (format, lint, test)
+- `poe app`: Launch Streamlit application
