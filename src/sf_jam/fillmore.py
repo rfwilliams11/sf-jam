@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from concert import Concert
 from headers import headers
+from util import parse_concert_date
 
 
 def retrieve_fillmore_concerts():
@@ -89,7 +90,9 @@ def parse_concert_listing(concert_div) -> Concert:
         # Create datetime object to get day of week
         try:
             date_obj = datetime.strptime(f"{month} {day} {year}", "%b %d %Y")
-            event["date"] = date_obj.strftime("%a %b %d")  # Format: "Fri Jan 24"
+            date = date_obj.strftime("%a %b %d")  # Format: "Fri Jan 24"
+            formatted_date = parse_concert_date(date)
+            event["date"] = formatted_date
         except ValueError:
             event["date"] = f"{month} {day}"  # Fallback to original format
 
@@ -116,52 +119,44 @@ def parse_concert_listing(concert_div) -> Concert:
 
     # Initialize fields that aren't in the provided HTML
     event.setdefault("venue", "The Fillmore")
-    event.setdefault("age_restriction", None)
-    event.setdefault("price_range", None)
-    event.setdefault("genre", None)
-    event.setdefault("door_time", None)
     event.setdefault("image_url", None)
 
     return event
 
 
-def fetch_ticket_details(ticket_url):
-    """
-    Fetch additional details from the ticket page
+# def fetch_ticket_details(ticket_url):
+#     """
+#     Fetch additional details from the ticket page
 
-    Args:
-        ticket_url (str): URL of the ticket page
+#     Args:
+#         ticket_url (str): URL of the ticket page
 
-    Returns:
-        dict: Additional event details
-    """
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    }
+#     Returns:
+#         dict: Additional event details
+#     """
 
-    try:
-        response = requests.get(ticket_url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
+#     try:
+#         response = requests.get(ticket_url, headers=headers)
+#         response.raise_for_status()
+#         soup = BeautifulSoup(response.text, "html.parser")
 
-        details = {}
+#         details = {}
 
-        # Note: These selectors would need to be adjusted based on the actual ticket page HTML structure
-        # This is just an example of what could be extracted
+#         # Note: These selectors would need to be adjusted based on the actual ticket page HTML structure
+#         # This is just an example of what could be extracted
 
-        # Example price range extraction (adjust selectors as needed)
-        price_elem = soup.select_one(".price-range")  # Adjust selector
-        if price_elem:
-            details["price_range"] = price_elem.text.strip()
+#         # Example price range extraction (adjust selectors as needed)
+#         price_elem = soup.select_one(".price-range")  # Adjust selector
+#         if price_elem:
+#             details["price_range"] = price_elem.text.strip()
 
-        # Example age restriction extraction
-        age_elem = soup.select_one(".age-restriction")  # Adjust selector
-        if age_elem:
-            details["age_restriction"] = age_elem.text.strip()
+#         # Example age restriction extraction
+#         age_elem = soup.select_one(".age-restriction")  # Adjust selector
+#         if age_elem:
+#             details["age_restriction"] = age_elem.text.strip()
 
-        return details
+#         return details
 
-    except Exception as e:
-        print(f"Error fetching ticket page: {e}")
-        return {}
+#     except Exception as e:
+#         print(f"Error fetching ticket page: {e}")
+#         return {}

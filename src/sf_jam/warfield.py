@@ -3,6 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 from concert import Concert
+from util import parse_concert_date
 
 
 def retrieve_warfield_concerts():
@@ -73,10 +74,6 @@ def parse_concert_listing(concert_div) -> Concert:
         "date": None,
         "headliner": None,
         "venue": "The Warfield",  # Default value
-        "age_restriction": None,  # Not present in HTML
-        "price_range": None,  # Not present in HTML
-        "genre": None,  # Not present in HTML
-        "door_time": None,  # Not in HTML
         "show_time": None,
         "ticket_url": None,
         "image_url": None,
@@ -104,7 +101,9 @@ def parse_concert_listing(concert_div) -> Concert:
     if date_container:
         date_span = date_container.find("span", class_="date")
         if date_span:
-            event_data["date"] = date_span.text.strip().replace("Fri, ", "Fri ")
+            date = date_span.text.strip().replace("Fri, ", "Fri ")
+            formatted_date = parse_concert_date(date)
+            event_data["date"] = formatted_date
 
         time_span = date_container.find("span", class_="time")
         if time_span:

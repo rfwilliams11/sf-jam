@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 from concert import Concert
 from headers import headers
+from util import parse_concert_date
 
 
 def retrieve_fox_concerts():
@@ -63,21 +64,16 @@ def parse_concert_listing(concert_div) -> Concert:
     title = title.text.strip() if title else None
 
     # Extract date
+    formatted_date = None
     date_elem = concert_div.find("div", class_="date-show")
-    date = date_elem.text.strip() if date_elem else None
+    if date_elem:
+        formatted_date = parse_concert_date(date_elem.text.strip())
 
     # Extract time information
     time_elem = concert_div.find("div", class_="time-show")
-    door_time = show_time = None
+    show_time = None
     if time_elem:
-        door_time_elem = time_elem.find("span", class_="event__doors-open")
         show_time_elem = time_elem.find("span", class_="event__start-time")
-
-        door_time = (
-            door_time_elem.text.replace("Doors:", "").strip()
-            if door_time_elem
-            else None
-        )
         show_time = (
             show_time_elem.text.replace("Show:", "").strip() if show_time_elem else None
         )
@@ -92,13 +88,9 @@ def parse_concert_listing(concert_div) -> Concert:
 
     return {
         "title": title,
-        "date": date,
+        "date": formatted_date,
         "headliner": title,
         "venue": "Fox Theatre",
-        "age_restriction": None,
-        "price_range": None,
-        "genre": None,
-        "door_time": door_time,
         "show_time": show_time,
         "ticket_url": ticket_url,
         "image_url": image_url,

@@ -2,6 +2,7 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 from concert import Concert
+from util import parse_concert_date
 
 
 def retrieve_chapel_concerts() -> List[Concert]:
@@ -94,14 +95,13 @@ def parse_concert_listing(concert_div) -> Concert:
         image_url = None
 
     try:
-        door_time = event_info.find("span", class_="see-doortime").text.strip()
-    except AttributeError:
-        door_time = None
-
-    try:
         show_time = event_info.find("span", class_="see-showtime").text.strip()
     except AttributeError:
         show_time = None
+
+    if event_info.find("p", class_="date"):
+        date = event_info.find("p", class_="date").text.strip()
+        formatted_date = parse_concert_date(date)
 
     concert_data = {
         "title": (
@@ -109,11 +109,7 @@ def parse_concert_listing(concert_div) -> Concert:
             if event_info.find("p", class_="title")
             else None
         ),
-        "date": (
-            event_info.find("p", class_="date").text.strip()
-            if event_info.find("p", class_="date")
-            else None
-        ),
+        "date": (formatted_date if formatted_date else None),
         "headliner": (
             event_info.find("p", class_="headliners").text.strip()
             if event_info.find("p", class_="headliners")
@@ -124,22 +120,6 @@ def parse_concert_listing(concert_div) -> Concert:
             if event_info.find("p", class_="venue")
             else None
         ),
-        "age_restriction": (
-            event_info.find("span", class_="ages").text.strip()
-            if event_info.find("span", class_="ages")
-            else None
-        ),
-        "price_range": (
-            event_info.find("span", class_="price").text.strip()
-            if event_info.find("span", class_="price")
-            else None
-        ),
-        "genre": (
-            event_info.find("p", class_="genre").text.strip()
-            if event_info.find("p", class_="genre")
-            else None
-        ),
-        "door_time": door_time,
         "show_time": show_time,
         "ticket_url": ticket_link,
         "image_url": image_url,
