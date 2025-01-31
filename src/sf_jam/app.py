@@ -1,25 +1,15 @@
-import json
+import sqlite3
 import streamlit as st
 import pandas as pd
-from datetime import datetime
 
 
-def load_json_file():
-    venues = [
-        "fox_concerts.json",
-        "chapel_concerts.json",
-        "warfield_concerts.json",
-        "fillmore_concerts.json",
-    ]
-
-    events = []
-
-    for venue in venues:
-        with open(venue, "r") as file:
-            # events = json.load(file)
-            events.extend(json.load(file))
-
-    return events
+def load_concerts_from_db():
+    """Load concerts from SQLite database."""
+    conn = sqlite3.connect("concerts.db")
+    query = "SELECT * FROM concerts"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
 
 
 def create_clickable_link(url):
@@ -43,7 +33,6 @@ def main():
             text-align: left !important;
             padding: 8px !important;
             white-space: nowrap !important;
-            # background-color: #f0f2f6 !important;
         }
         td {
             text-align: left !important;
@@ -62,8 +51,7 @@ def main():
         unsafe_allow_html=True,
     )
 
-    events = load_json_file()
-    df = pd.DataFrame(events)
+    events = load_concerts_from_db()
 
     # Create a layout with columns for the filters
     col1, col2 = st.columns([2, 1])
@@ -75,7 +63,7 @@ def main():
     # Add venue filter in the second column
     with col2:
         # Get unique venues for the filter
-        all_venues = sorted(df["venue"].unique())
+        all_venues = sorted(events["venue"].unique())
         selected_venues = st.multiselect(
             "Select venues:", options=all_venues, default=[], key="venue_filter"
         )
@@ -92,7 +80,7 @@ def main():
     columns_to_show = list(column_mapping.keys())
 
     # Create a copy of the DataFrame with selected columns
-    df_display = df[columns_to_show].copy()
+    df_display = events[columns_to_show].copy()
 
     # Filter the DataFrame based on selected venues
     if selected_venues:
@@ -105,7 +93,6 @@ def main():
         ]
 
     # Convert date strings to datetime for sorting
-    # First, create a copy of the date column for sorting
     df_display["date_for_sorting"] = pd.to_datetime(df_display["date"])
 
     # Sort the DataFrame by the datetime column
@@ -119,9 +106,6 @@ def main():
 
     # Rename the columns
     df_display = df_display.rename(columns=column_mapping)
-
-    # Display the table with HTML rendering enabled
-    # st.write(df_display.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     # Show results or no results message
     if len(df_display) > 0:

@@ -9,5 +9,6 @@ dist/
 build/
 .pytest_cache/
 .coverage
+*.db
 
 *_concerts.json
