@@ -1,11 +1,16 @@
-# SF Jam 🎸🌉
+# SF Jam 🌉🎸
 
-## Overview
-SF Jam is a Streamlit web application aggregating upcoming concerts from San Francisco venues.
+SF Jam is a simple Streamlit app aggregating upcoming concerts from Bay Area venues.
+
+Current venue lineup:
+- The Chapel
+- The Fillmore
+- Fox Theatre (Oakland)
+- The Warfield
 
 ## Setup
 ```bash
-# Install Poetry (if not already installed)
+# Install Poetry
 pip install poetry
 
 # Clone the repository
@@ -21,4 +26,5 @@ poetry install
 - `poe lint`: Run flake8 linter
 - `poe test`: Run pytest
 - `poe check`: Run all checks (format, lint, test)
+- `poe run`: Populate concert data from venue sites
 - `poe app`: Launch Streamlit application
