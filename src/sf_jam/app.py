@@ -1,6 +1,7 @@
 import sqlite3
 import streamlit as st
 import pandas as pd
+import threading
 from main import run_scraper
 
 
@@ -23,6 +24,13 @@ def create_venue_link(row):
 
 
 def main():
+    # Run scraper in a separate thread
+    scraper_thread = threading.Thread(target=run_scraper)
+    scraper_thread.daemon = (
+        True  # Make thread daemon so it exits when main program exits
+    )
+    scraper_thread.start()
+
     st.title("Welcome to SF Jam 🌉 🎸")
     st.write("Check out a list of concerts at local Bay Area venues")
 
@@ -244,9 +252,6 @@ def main():
         """,
         unsafe_allow_html=True,
     )
-
-    # Run scheduled scraping script
-    run_scraper()
 
 
 if __name__ == "__main__":

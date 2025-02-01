@@ -47,7 +47,7 @@ def run_scraper():
         scrape_task()
 
         # Schedule daily scrape
-        schedule.every().day.at("05:30").do(scrape_task)  # Runs at midnight
+        schedule.every().day.at("05:30").do(scrape_task)  # Runs at 5:30 AM
 
         # Create and start scheduler thread
         scheduler_thread = threading.Thread(target=run_scheduler)
