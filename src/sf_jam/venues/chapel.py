@@ -1,7 +1,7 @@
 from typing import List
 import requests
 from bs4 import BeautifulSoup
-from concert import Concert
+from models import Concert
 from util import parse_concert_date
 
 

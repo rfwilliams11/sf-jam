@@ -2,7 +2,7 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from concert import Concert
+from models import Concert
 from headers import headers
 from util import parse_concert_date
 

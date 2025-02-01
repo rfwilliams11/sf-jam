@@ -13,7 +13,7 @@ def load_concerts_from_db():
 
 
 def create_clickable_link(url):
-    """Create a clickable link with 'Buy Tickets' text"""
+    """Create a clickable link with 'Tickets' text"""
     return f'<a href="{url}" target="_blank">Tickets</a>'
 
 
