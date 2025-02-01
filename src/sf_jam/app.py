@@ -12,75 +12,139 @@ def load_concerts_from_db():
     return df
 
 
-def create_clickable_link(url):
-    """Create a clickable link with 'Tickets' text"""
-    return f'<a href="{url}" target="_blank">Tickets</a>'
+def create_venue_link(row):
+    """Create a clickable venue link using the ticket URL"""
+    return (
+        f'<a href="{row["ticket_url"]}" target="_blank">{row["venue"]}</a>'
+        if pd.notna(row["ticket_url"])
+        else row["venue"]
+    )
 
 
 def main():
     st.title("Welcome to SF Jam 🌉 🎸")
     st.write("Check out a list of concerts at local Bay Area venues")
 
-    # Add custom CSS to style the table
+    # Add custom CSS to make the table responsive
     st.markdown(
         """
-        <style>
+    <style>
+    /* Mobile-first responsive design */
+    .table-container {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 100%
+    }
+    
+    /* Responsive table styling */
+    @media screen and (max-width: 768px) {
         table {
-            width: 100% !important;
-            white-space: nowrap !important;
+            font-size: 16px;
         }
+        
+        th, td {
+            padding: 8px 4px !important;
+            min-width: 80px;
+        }
+
         th {
-            text-align: left !important;
-            padding: 8px !important;
-            white-space: nowrap !important;
-        }
-        td {
-            text-align: left !important;
-            padding: 8px !important;
-            white-space: nowrap !important;
-        }
-        a {
-            color: #1E88E5 !important;
-            text-decoration: none !important;
-        }
-        a:hover {
-            text-decoration: underline !important;
-        }
-        </style>
+            text-align: left !important;  /* Force left alignment */
+            padding: 12px 8px !important;
+            font-weight: 800;
+    }
+        
+        /* Adjust column widths for mobile */
+        th:nth-child(1), td:nth-child(1) { width: 42%; }  /* Artist/Event */
+        th:nth-child(2), td:nth-child(2) { width: 34%; }  /* Date */
+        th:nth-child(3), td:nth-child(3) { width: 26%; }  /* Venue */
+    }
+    
+    /* Search form improvements */
+    .search-form {
+        # margin-bottom: 1rem;
+    }
+    
+    /* Improve button styling */
+    .stButton > button {
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Improve multiselect on mobile */
+    .stMultiSelect {
+        max-width: 100%;
+    }
+    
+    /* Add spacing between elements */
+    .spacer {
+        margin: 1rem 0;
+    }
+    </style>
     """,
         unsafe_allow_html=True,
     )
 
     events = load_concerts_from_db()
 
-    # Create a layout with columns for the filters
-    col1, col2 = st.columns([2, 1])
+    # Initialize session state if it doesn't exist
+    if "search_term" not in st.session_state:
+        st.session_state.search_term = ""
 
-    # Add search bar in the first (wider) column
-    with col1:
-        search_term = st.text_input("Search artists/events:", key="search_bar")
+    # Create a form for the search
+    with st.form(key="search_form", clear_on_submit=False):
+        # Create a horizontal layout for search input and buttons
+        # search_cols = st.columns(3)  # Adjust ratios as needed
 
-    # Add venue filter in the second column
-    with col2:
-        # Get unique venues for the filter
-        all_venues = sorted(events["venue"].unique())
-        selected_venues = st.multiselect(
-            "Select venues:", options=all_venues, default=[], key="venue_filter"
+        search_term = st.text_input(
+            "Search artists/events:",
+            value=st.session_state.search_term,
+            key="search_bar",
         )
+
+        # Create buttons for searching and clearing
+        col1, col2 = st.columns([1, 1])  # Ratio to adjust button widths
+        with col1:
+            search_submitted = st.form_submit_button("Search", use_container_width=True)
+
+        with col2:
+            clear_submitted = False
+            if st.session_state.search_term != "":
+                clear_submitted = st.form_submit_button(
+                    "Clear", use_container_width=True
+                )
+
+    # Handle the search submissions
+    if search_submitted:
+        st.session_state.search_term = search_term
+        st.rerun()
+
+    if clear_submitted:
+        st.session_state.search_term = ""  # Clear the search term
+        st.rerun()  # Rerun the app to reflect the changes
+
+    # Add venue filter below the search form
+    st.write("### Venue Filter")  # Optional title for clarity
+    # Get unique venues for the filter
+    all_venues = sorted(events["venue"].unique())
+    selected_venues = st.multiselect(
+        "Select venues:", options=all_venues, default=[], key="venue_filter"
+    )
 
     # Define columns to show and their display names
     column_mapping = {
         "headliner": "Artist/Event",
         "date": "Date",
-        "venue": "Venue",
-        "show_time": "Show Time",
-        "ticket_url": "",
+        "venue_link": "Tickets",
     }
 
-    columns_to_show = list(column_mapping.keys())
-
     # Create a copy of the DataFrame with selected columns
-    df_display = events[columns_to_show].copy()
+    df_display = events[["headliner", "date", "venue", "ticket_url"]].copy()
 
     # Filter the DataFrame based on selected venues
     if selected_venues:
@@ -98,20 +162,26 @@ def main():
     # Sort the DataFrame by the datetime column
     df_display = df_display.sort_values("date_for_sorting")
 
-    # Remove the sorting column as we don't need to display it
-    df_display = df_display.drop("date_for_sorting", axis=1)
+    # Create the venue links
+    df_display["venue_link"] = df_display.apply(create_venue_link, axis=1)
 
-    # Convert ticket URLs to clickable links
-    df_display["ticket_url"] = df_display["ticket_url"].apply(create_clickable_link)
+    # Keep only the columns we want to display
+    df_display = df_display[["headliner", "date", "venue_link"]]
 
     # Rename the columns
     df_display = df_display.rename(columns=column_mapping)
 
     # Show results or no results message
     if len(df_display) > 0:
-        st.write(f"Showing {len(df_display)} events")
-        # Display the table with HTML rendering enabled
-        st.write(df_display.to_html(escape=False, index=False), unsafe_allow_html=True)
+        event_string = "events" if len(df_display) > 1 else "event"
+        st.write(f"Showing {len(df_display)} {event_string}")
+        # Wrap table in a container div and display
+        table_html = f"""
+        <div class="table-container">
+            {df_display.to_html(escape=False, index=False)}
+        </div>
+        """
+        st.write(table_html, unsafe_allow_html=True)
     else:
         # If search term was used, include it in the message
         if search_term:
@@ -132,6 +202,41 @@ def main():
                 </div>""",
                 unsafe_allow_html=True,
             )
+
+        # Add the footer at the bottom
+    st.markdown(
+        """
+        <style>
+            .block-container {
+                padding-top: 50px !important;
+                padding-bottom: 10px !important;
+            }
+            .footer {
+                # position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                margin-top: 75px;
+                border-top: 1px solid #ddd;  /* Optional: add a top border */
+            }
+            .footer img {
+                height: 20px;  /* Adjust the height of the image */
+                vertical-align: middle;  /* Align the image vertically with the text */
+            }
+        </style>
+        <div class="footer">
+            <p>
+                Made by rfwilliams11
+                <a href="https://github.com/rfwilliams11/sf-jam">
+                    <img src="https://banner2.cleanpng.com/20180421/die/kisspng-github-computer-icons-node-js-circle-pack-5adb933cc5ffc2.914040391524339516811.jpg" alt="GitHub" />
+                </a>
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 if __name__ == "__main__":
