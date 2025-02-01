@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def run_scheduler():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(60)
 
 
 def scrape_task():
@@ -40,14 +40,14 @@ def scrape_task():
         logger.error(f"Critical error in scrape_task: {e}\n{traceback.format_exc()}")
 
 
-def main():
+def run_scraper():
     try:
         # Run initial scrape
         logger.info("Starting initial scrape...")
         scrape_task()
 
         # Schedule daily scrape
-        schedule.every().day.at("05:00").do(scrape_task)  # Runs at midnight
+        schedule.every().day.at("05:30").do(scrape_task)  # Runs at midnight
 
         # Create and start scheduler thread
         scheduler_thread = threading.Thread(target=run_scheduler)
@@ -56,7 +56,7 @@ def main():
 
         # Keep main thread alive
         while True:
-            time.sleep(1)
+            time.sleep(60)
 
     except Exception as e:
         logger.error(f"Critical error in main: {e}\n{traceback.format_exc()}")
@@ -64,4 +64,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_scraper()

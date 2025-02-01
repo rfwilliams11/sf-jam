@@ -1,6 +1,7 @@
 import sqlite3
 import streamlit as st
 import pandas as pd
+from main import run_scraper
 
 
 def load_concerts_from_db():
@@ -63,6 +64,12 @@ def main():
         th:nth-child(1), td:nth-child(1) { width: 42%; }  /* Artist/Event */
         th:nth-child(2), td:nth-child(2) { width: 34%; }  /* Date */
         th:nth-child(3), td:nth-child(3) { width: 26%; }  /* Venue */
+    }
+
+    th {
+            text-align: left !important;  /* Force left alignment */
+            padding: 12px 8px !important;
+            font-weight: 800;
     }
     
     /* Search form improvements */
@@ -237,6 +244,9 @@ def main():
         """,
         unsafe_allow_html=True,
     )
+
+    # Run scheduled scraping script
+    run_scraper()
 
 
 if __name__ == "__main__":
