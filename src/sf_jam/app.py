@@ -31,7 +31,7 @@ def main():
     scraper_thread.daemon = True
     scraper_thread.start()
 
-    st.title("Welcome to SF Jam 🌉 🎸")
+    st.title("SF Jam 🌉 🎸")
     st.write("Check out a list of concerts at local Bay Area venues")
 
     # Add custom CSS to make the table responsive
