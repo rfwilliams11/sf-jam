@@ -1,8 +1,8 @@
-import sqlite3
 import logging
+import sqlite3
 from contextlib import contextmanager
-from typing import List, Dict, Tuple
 from datetime import datetime
+from typing import Dict, List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,6 @@ class ConcertDatabase:
                 """
                 )
                 conn.commit()
-                logger.info("Database initialized successfully")
         except sqlite3.Error as e:
             logger.error(f"Database initialization failed: {e}")
             raise

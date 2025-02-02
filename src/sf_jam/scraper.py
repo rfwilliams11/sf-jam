@@ -1,12 +1,13 @@
 import logging
 import traceback
 from typing import Dict
-from models import VenueConfig
+
 from database import ConcertDatabase
+from models import VenueConfig
 from venues.chapel import retrieve_chapel_concerts
 from venues.fillmore import retrieve_fillmore_concerts
-from venues.warfield import retrieve_warfield_concerts
 from venues.fox import retrieve_fox_concerts
+from venues.warfield import retrieve_warfield_concerts
 
 logger = logging.getLogger(__name__)
 

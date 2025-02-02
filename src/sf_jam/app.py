@@ -1,12 +1,13 @@
 import sqlite3
-import streamlit as st
-import pandas as pd
 import threading
+
+import pandas as pd
+import streamlit as st
 from main import run_scraper
 
 
 def load_concerts_from_db():
-    """Load concerts from SQLite database."""
+    """Load concerts from local SQLite database."""
     conn = sqlite3.connect("concerts.db")
     query = "SELECT * FROM concerts"
     df = pd.read_sql_query(query, conn)
@@ -25,10 +26,9 @@ def create_venue_link(row):
 
 def main():
     # Run scraper in a separate thread
+    # TODO: Separate the scraping from the app
     scraper_thread = threading.Thread(target=run_scraper)
-    scraper_thread.daemon = (
-        True  # Make thread daemon so it exits when main program exits
-    )
+    scraper_thread.daemon = True
     scraper_thread.start()
 
     st.title("Welcome to SF Jam 🌉 🎸")
@@ -38,7 +38,12 @@ def main():
     st.markdown(
         """
     <style>
-    /* Mobile-first responsive design */
+    .block-container {
+        padding-top: 50px !important;
+        padding-bottom: 10px !important;
+        padding-right: 5px !important;
+        padding-left: 10px !important;
+    }
     .table-container {
         max-width: 100%;
         overflow-x: auto;
@@ -54,7 +59,7 @@ def main():
     /* Responsive table styling */
     @media screen and (max-width: 768px) {
         table {
-            font-size: 16px;
+            font-size: 15.5px;
         }
         
         th, td {
@@ -64,14 +69,14 @@ def main():
 
         th {
             text-align: left !important;  /* Force left alignment */
-            padding: 12px 8px !important;
+            padding: 8px 4px !important;
             font-weight: 800;
-    }
+        }
         
         /* Adjust column widths for mobile */
-        th:nth-child(1), td:nth-child(1) { width: 42%; }  /* Artist/Event */
-        th:nth-child(2), td:nth-child(2) { width: 34%; }  /* Date */
-        th:nth-child(3), td:nth-child(3) { width: 26%; }  /* Venue */
+        th:nth-child(1), td:nth-child(1) { width: 40%; }  /* Artist/Event */
+        th:nth-child(2), td:nth-child(2) { width: 35%; }  /* Date */
+        th:nth-child(3), td:nth-child(3) { width: 27%; }  /* Venue */
     }
 
     th {
@@ -99,6 +104,21 @@ def main():
     /* Add spacing between elements */
     .spacer {
         margin: 1rem 0;
+    }
+
+    .footer {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        margin-top: 75px;
+        border-top: 1px solid #ddd;  /* Optional: add a top border */
+    }
+
+    .footer img {
+        height: 20px;  /* Adjust the height of the image */
+        vertical-align: middle;  /* Align the image vertically with the text */
     }
     </style>
     """,
@@ -142,9 +162,6 @@ def main():
     if clear_submitted:
         st.session_state.search_term = ""  # Clear the search term
         st.rerun()  # Rerun the app to reflect the changes
-
-    # Add venue filter below the search form
-    st.write("### Venue Filter")  # Optional title for clarity
     # Get unique venues for the filter
     all_venues = sorted(events["venue"].unique())
     selected_venues = st.multiselect(
@@ -221,26 +238,6 @@ def main():
         # Add the footer at the bottom
     st.markdown(
         """
-        <style>
-            .block-container {
-                padding-top: 50px !important;
-                padding-bottom: 10px !important;
-            }
-            .footer {
-                # position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                text-align: center;
-                padding: 10px;
-                margin-top: 75px;
-                border-top: 1px solid #ddd;  /* Optional: add a top border */
-            }
-            .footer img {
-                height: 20px;  /* Adjust the height of the image */
-                vertical-align: middle;  /* Align the image vertically with the text */
-            }
-        </style>
         <div class="footer">
             <p>
                 Made by rfwilliams11

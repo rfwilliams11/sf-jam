@@ -1,9 +1,10 @@
+from datetime import datetime
 from typing import List
+
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
-from models import Concert
 from headers import headers
+from models import Concert
 from util import parse_concert_date
 
 

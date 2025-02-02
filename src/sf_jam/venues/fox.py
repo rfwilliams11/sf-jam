@@ -1,9 +1,9 @@
 from typing import List
 
-from bs4 import BeautifulSoup
 import requests
-from models import Concert
+from bs4 import BeautifulSoup
 from headers import headers
+from models import Concert
 from util import parse_concert_date
 
 
@@ -58,7 +58,6 @@ def fetch_and_parse_concerts(url: str) -> List[Concert]:
 
 
 def parse_concert_listing(concert_div) -> Concert:
-
     # Extract title
     title = concert_div.find("h2", class_="show-title")
     title = title.text.strip() if title else None

@@ -1,9 +1,11 @@
 import logging
+import os
+import threading
+import time
 import traceback
 from datetime import datetime
-import time
+
 import schedule
-import threading
 from scraper import ConcertScraper
 
 # Set up logging
@@ -42,12 +44,15 @@ def scrape_task():
 
 def run_scraper():
     try:
-        # Run initial scrape
-        logger.info("Starting initial scrape...")
-        scrape_task()
+        # Run initial scrape if concerts have not been populated
+        if not os.path.exists("concerts.db"):
+            logger.info("Starting initial scrape...")
+            scrape_task()
+        else:
+            logger.info("Concerts database exists. Skipping initial scrape.")
 
         # Schedule daily scrape
-        schedule.every().day.at("05:30").do(scrape_task)  # Runs at 5:30 AM
+        schedule.every().day.at("09:19").do(scrape_task)  # Runs at 5:30 AM
 
         # Create and start scheduler thread
         scheduler_thread = threading.Thread(target=run_scheduler)
