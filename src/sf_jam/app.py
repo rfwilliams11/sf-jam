@@ -55,13 +55,13 @@ def main():
     table {
         width: 100%
     }
-    
+
     /* Responsive table styling */
     @media screen and (max-width: 768px) {
         table {
             font-size: 15.5px;
         }
-        
+
         th, td {
             padding: 8px 4px !important;
             min-width: 80px;
@@ -72,7 +72,7 @@ def main():
             padding: 8px 4px !important;
             font-weight: 800;
         }
-        
+
         /* Adjust column widths for mobile */
         th:nth-child(1), td:nth-child(1) { width: 40%; }  /* Artist/Event */
         th:nth-child(2), td:nth-child(2) { width: 35%; }  /* Date */
@@ -84,23 +84,23 @@ def main():
             padding: 12px 8px !important;
             font-weight: 800;
     }
-    
+
     /* Search form improvements */
     .search-form {
         # margin-bottom: 1rem;
     }
-    
+
     /* Improve button styling */
     .stButton > button {
         width: 100%;
         margin: 0;
     }
-    
+
     /* Improve multiselect on mobile */
     .stMultiSelect {
         max-width: 100%;
     }
-    
+
     /* Add spacing between elements */
     .spacer {
         margin: 1rem 0;
@@ -242,7 +242,7 @@ def main():
             <p>
                 Made by rfwilliams11
                 <a href="https://github.com/rfwilliams11/sf-jam">
-                    <img src="https://banner2.cleanpng.com/20180421/die/kisspng-github-computer-icons-node-js-circle-pack-5adb933cc5ffc2.914040391524339516811.jpg" alt="GitHub" />
+                    <img src="https://banner2.cleanpng.com/20180421/die/kisspng-github-computer-icons-node-js-circle-pack-5adb933cc5ffc2.914040391524339516811.jpg" alt="GitHub" />  # noqa: E501
                 </a>
             </p>
         </div>
