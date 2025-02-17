@@ -7,6 +7,7 @@ Current venue lineup:
 - The Fillmore
 - Fox Theatre (Oakland)
 - The Warfield
+- Greek Theatre (Berkeley)
 
 ## Setup
 ```bash

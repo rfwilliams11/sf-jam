@@ -4,10 +4,12 @@ from typing import Dict
 
 from database import ConcertDatabase
 from models import VenueConfig
+
 from venues.chapel import retrieve_chapel_concerts
 from venues.fillmore import retrieve_fillmore_concerts
 from venues.fox import retrieve_fox_concerts
 from venues.warfield import retrieve_warfield_concerts
+from venues.greek import retrieve_greek_concerts
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +29,9 @@ class ConcertScraper:
             ),
             "Fox Theatre": VenueConfig(
                 "Fox Theatre", retrieve_fox_concerts, "Fox Theatre"
+            ),
+            "Greek Theatre": VenueConfig(
+                "Greek Theatre", retrieve_greek_concerts, "Greek Theatre"
             ),
         }
 

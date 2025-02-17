@@ -242,7 +242,7 @@ def main():
             <p>
                 Made by rfwilliams11
                 <a href="https://github.com/rfwilliams11/sf-jam">
-                    <img src="https://banner2.cleanpng.com/20180421/die/kisspng-github-computer-icons-node-js-circle-pack-5adb933cc5ffc2.914040391524339516811.jpg" alt="GitHub" />  # noqa: E501
+                    <img src="https://banner2.cleanpng.com/20180421/die/kisspng-github-computer-icons-node-js-circle-pack-5adb933cc5ffc2.914040391524339516811.jpg" alt="GitHub" />
                 </a>
             </p>
         </div>
