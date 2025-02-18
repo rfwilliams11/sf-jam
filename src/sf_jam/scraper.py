@@ -10,6 +10,7 @@ from venues.fillmore import retrieve_fillmore_concerts
 from venues.fox import retrieve_fox_concerts
 from venues.warfield import retrieve_warfield_concerts
 from venues.greek import retrieve_greek_concerts
+from venues.independent import retrieve_independent_concerts
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,9 @@ class ConcertScraper:
             ),
             "Greek Theatre": VenueConfig(
                 "Greek Theatre", retrieve_greek_concerts, "Greek Theatre"
+            ),
+            "The Independent": VenueConfig(
+                "The Independent", retrieve_independent_concerts, "The Independent"
             ),
         }
 

@@ -8,6 +8,7 @@ Current venue lineup:
 - Fox Theatre (Oakland)
 - The Warfield
 - Greek Theatre (Berkeley)
+- The Independent
 
 ## Setup
 ```bash
