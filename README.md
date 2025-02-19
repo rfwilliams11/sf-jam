@@ -9,6 +9,8 @@ Current venue lineup:
 - The Warfield
 - Greek Theatre (Berkeley)
 - The Independent
+- Cafe du Nord
+- Great American Music Hall
 
 ## Setup
 ```bash
