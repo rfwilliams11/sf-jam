@@ -42,12 +42,8 @@ def fetch_and_parse_concerts(url: str) -> List[Concert]:
         # Find all concert listings
         concert_divs = soup.find_all("div", class_="tw-section")
 
-        # if concert_divs:
-        # print(concert_divs[0])
-
         # Parse each concert listing
         for concert_div in concert_divs:
-            # print(concert_div)
             concert_data = parse_concert_listing(concert_div)
             if concert_data:
                 concerts.append(concert_data)

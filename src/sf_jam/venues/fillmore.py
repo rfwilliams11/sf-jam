@@ -103,7 +103,7 @@ def parse_concert_listing(concert_div) -> Concert:
         event["show_time"] = time_span.text
 
     # Extract title/headliner
-    title_span = concert_div.select_one(".sc-fyofxi-5")
+    title_span = concert_div.select_one(".sc-fyofxi-6")
     if title_span:
         event["title"] = title_span.text
         event["headliner"] = title_span.text

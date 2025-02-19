@@ -21,6 +21,7 @@ def parse_concert_date(date_string):
         "%a %b %d, %Y",  # 'Fri Jan 24, 2025'
         "%a, %b %d, %Y",  # 'Sat, Feb 1, 2025'
         "%m.%d %a",  # '2.17 Mon
+        "%a %m.%d",  # 'Tue 2.18'
     ]
 
     # Current year as fallback

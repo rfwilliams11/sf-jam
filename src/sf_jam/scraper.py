@@ -11,6 +11,8 @@ from venues.fox import retrieve_fox_concerts
 from venues.warfield import retrieve_warfield_concerts
 from venues.greek import retrieve_greek_concerts
 from venues.independent import retrieve_independent_concerts
+from venues.dunord import retrieve_dunord_concerts
+from venues.great_american import retrieve_great_american_concerts
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,14 @@ class ConcertScraper:
             ),
             "The Independent": VenueConfig(
                 "The Independent", retrieve_independent_concerts, "The Independent"
+            ),
+            "Cafe du Nord": VenueConfig(
+                "Cafe du Nord", retrieve_dunord_concerts, "Cafe du Nord"
+            ),
+            "Great American": VenueConfig(
+                "Great American",
+                retrieve_great_american_concerts,
+                "Great American",
             ),
         }
 
