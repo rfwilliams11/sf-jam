@@ -52,7 +52,7 @@ def run_scraper():
             logger.info("Concerts database exists. Skipping initial scrape.")
 
         # Schedule daily scrape
-        schedule.every().day.at("11:30").do(scrape_task)  # Runs at 11:30 AM
+        schedule.every().day.at("14:30").do(scrape_task)  # Runs at 6:30 AM
 
         # Create and start scheduler thread
         scheduler_thread = threading.Thread(target=run_scheduler)
