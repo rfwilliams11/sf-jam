@@ -76,6 +76,12 @@ class ConcertDatabase:
                             concert,
                         )
                         inserted += 1
+                    except sqlite3.IntegrityError as e:  # noqa
+                        # Skip duplicates (constraint violations) without counting as error
+                        logger.debug(
+                            f"Skipping duplicate concert for {venue}: {concert}"
+                        )
+                        continue
                     except sqlite3.Error as e:
                         errors += 1
                         logger.error(

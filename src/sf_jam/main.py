@@ -18,9 +18,17 @@ logger = logging.getLogger(__name__)
 
 
 def run_scheduler():
+    """Run the scheduler with proper error handling and shutdown capability."""
     while True:
-        schedule.run_pending()
-        time.sleep(60)
+        try:
+            schedule.run_pending()
+            time.sleep(60)
+        except KeyboardInterrupt:
+            logger.info("Scheduler stopped by user")
+            break
+        except Exception as e:
+            logger.error(f"Scheduler error: {e}")
+            time.sleep(300)  # Wait 5 minutes before retrying after error
 
 
 def scrape_task():
@@ -31,7 +39,8 @@ def scrape_task():
         # Log overall results
         success_count = sum(1 for success in results.values() if success)
         logger.info(
-            f"Scraping completed at {datetime.now()}. {success_count}/{len(results)} venues successful"
+            f"Scraping completed at {datetime.now()}. "
+            f"{success_count}/{len(results)} venues successful"
         )
 
         for venue, success in results.items():
@@ -40,6 +49,7 @@ def scrape_task():
 
     except Exception as e:
         logger.error(f"Critical error in scrape_task: {e}\n{traceback.format_exc()}")
+        time.sleep(300)  # Wait 5 minutes before next attempt
 
 
 def run_scraper():

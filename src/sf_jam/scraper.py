@@ -1,6 +1,6 @@
 import logging
-import traceback
 from typing import Dict
+import time
 
 from database import ConcertDatabase
 from models import VenueConfig
@@ -56,21 +56,35 @@ class ConcertScraper:
             logger.error(f"Unknown venue: {venue_name}")
             return False
 
-        try:
-            logger.info(f"Starting scrape for {venue_name}")
-            concerts = venue_config.retrieval_func()
+        max_retries = 3
+        retry_count = 0
 
-            if not concerts:
-                logger.warning(f"No concerts retrieved for {venue_name}")
-                return False
+        while retry_count < max_retries:
+            try:
+                logger.info(
+                    f"Starting scrape for {venue_name} (attempt {retry_count + 1})"
+                )
+                concerts = venue_config.retrieval_func()
 
-            inserted, errors = self.db.save_concerts(concerts, venue_config.db_name)
-            success = inserted > 0 and errors == 0
-            return success
+                if not concerts:
+                    logger.warning(f"No concerts retrieved for {venue_name}")
+                    return False
 
-        except Exception as e:
-            logger.error(f"Error scraping {venue_name}: {e}\n{traceback.format_exc()}")
-            return False
+                inserted, errors = self.db.save_concerts(concerts, venue_config.db_name)
+                success = inserted > 0 and errors == 0
+                return success
+
+            except Exception as e:
+                retry_count += 1
+                wait_time = 2**retry_count  # Exponential backoff: 2, 4, 8 seconds
+                logger.error(
+                    f"Error scraping {venue_name} (attempt {retry_count}): {e}\n"
+                    f"Waiting {wait_time} seconds before retry..."
+                )
+                time.sleep(wait_time)
+
+        logger.error(f"Failed to scrape {venue_name} after {max_retries} attempts")
+        return False
 
     def scrape_all_venues(self) -> Dict[str, bool]:
         """
