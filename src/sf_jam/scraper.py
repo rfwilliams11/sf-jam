@@ -72,7 +72,10 @@ class ConcertScraper:
 
                 inserted, errors = self.db.save_concerts(concerts, venue_config.db_name)
                 success = inserted > 0 and errors == 0
-                return success
+                if success:
+                    return True
+                else:
+                    retry_count += 1
 
             except Exception as e:
                 retry_count += 1
